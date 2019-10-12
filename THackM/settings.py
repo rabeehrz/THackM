@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'users',
     'cases',
     'reports',
+    'report_code',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
