@@ -67,26 +67,29 @@
   <div class="container">
       
     <p class="lead">
-      
+      {% for report in reports %}
       <div class="container request">
-        <h3 class="rhead">Request #5</h3>
-        <p class="rdesc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla scelerisque, risus sit amet bibendum mattis, massa est bibendum mauris, in eleifend nulla leo quis justo. Cras vitae scelerisque nulla. Nunc dolor nulla, porttitor id orci at, ultrices sollicitudin magna. Morbi fermentum risus elit, vel vehicula lorem feugiat efficitur. Donec eleifend sed metus vitae suscipit. Ut facilisis non orci eget feugiat. Quisque turpis mauris, aliquet eu eros non, volutpat malesuada justo. Mauris rutrum bibendum nunc et posuere. Integer commodo aliquet porttitor. Quisque porta malesuada sagittis. Cras ullamcorper in mi non molestie.</p>
-        <p class="rdesc"> Possible IPC Codes: 311, 312, 313</p>
+        <h3 class="rhead">Request #{{report.id}}</h3>
+        <p class="rdesc"> {{report.description}}</p>
+        
+        <p class="rdesc"> Possible IPC Codes: {% for key, value in ipc.items%}
+            {%if key == report.id%}
+              {{value}}
+            {%endif%}
+          {% endfor %}</p>
         <div class="decisions">
           <button type="button" class="btn btn-danger">Decline</button>
-          <button type="button" class="btn btn-success">Accept</button>
+          <form action="http://localhost:8000/api/reports/{{report.id}}/update" method="POST"> 
+            {% csrf_token %}
+              <input type="hidden" value = "1" name="status"/>
+              <input type="hidden" name="_method" value="PUT">
+              <input type="hidden" value = "{{report.description}}" name="description"/>
+              <button type="submit" class="btn btn-success">Accept</button>
+          </form>
+          
         </div>
       </div>
-
-      <div class="container request">
-          <h3 class="rhead">Request #7</h3>
-          <p class="rdesc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla scelerisque, risus sit amet bibendum mattis, massa est bibendum mauris, in eleifend nulla leo quis justo. Cras vitae scelerisque nulla. Nunc dolor nulla, porttitor id orci at, ultrices sollicitudin magna. Morbi fermentum risus elit, vel vehicula lorem feugiat efficitur. Donec eleifend sed metus vitae suscipit. Ut facilisis non orci eget feugiat. Quisque turpis mauris, aliquet eu eros non, volutpat malesuada justo. Mauris rutrum bibendum nunc et posuere. Integer commodo aliquet porttitor. Quisque porta malesuada sagittis. Cras ullamcorper in mi non molestie.</p>
-          <p class="rdesc"> Possible IPC Codes: 311, 312, 313</p>
-          <div class="decisions">
-            <button type="button" class="btn btn-danger">Decline</button>
-            <button type="button" class="btn btn-success">Accept</button>
-          </div>
-        </div>
+      {% endfor %}
       
     </p>
     
