@@ -5,6 +5,11 @@ from rest_framework.decorators import api_view
 from reports.models import Report
 from reports.api.serializers import ReportSerializer
 
+from users.views import login
+from django.shortcuts import redirect, render
+
+from django.http import HttpResponse
+
 # from final import findLawyer
 from cases.models import Case
 from users.models import User
@@ -18,6 +23,27 @@ def api_detail_reports_view(request, id):
     if request.method == "GET":
         serializer = ReportSerializer(report)
         return Response(serializer.data)
+def api_accept_reports_view(request, id):
+    try:
+        report = Report.objects.get(pk=id)
+    except Report.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        report.status = 2
+        report.save()
+        return HttpResponse('<h4>Updated successfully</h4>')
+
+def api_decline_reports_view(request, id):
+    try:
+        report = Report.objects.get(pk=id)
+    except Report.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        report.status = 3
+        report.save()
+        return HttpResponse('<h4>Updated successfully</h4>')
 
 @api_view(['PUT',])
 def api_update_reports_view(request, id):
