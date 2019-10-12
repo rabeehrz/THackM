@@ -61,3 +61,7 @@ def api_create_users_view(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET',])
+def api_login_page(request):
+    return Response(template_name="users/index.html")

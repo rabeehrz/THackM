@@ -1,0 +1,25 @@
+
+#loginBox{
+    float: left;
+    width : 20%;
+    margin-left: 70px;
+    margin-top : 200px;
+    border-radius: 5px;
+    background-color:#eeeeee;
+    padding: 20px;
+    
+}
+
+#submit{
+    background-color: black;
+    color: white;
+    box-shadow: none;
+    border-color:black;
+}
+.form-control:focus {
+
+    border-color:black;
+
+    box-shadow: 0px 1px 1px black ;
+
+}
