@@ -25,7 +25,7 @@ def login(request):
         ipc[codes] = ", ".join(map(str, ipc[codes]))
     print(ipc)    
     context = {
-        "name" : name,
+        "person" : person[0],
         "reports": reports,
         "ipc": ipc
     }

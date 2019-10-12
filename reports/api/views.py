@@ -1,14 +1,13 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
 from reports.models import Report
 from reports.api.serializers import ReportSerializer
-
 from users.views import login
 from django.shortcuts import redirect, render
-
 from django.http import HttpResponse
+from users.models import User
+from report_code.models import ReportCode
 
 # from final import findLawyer
 from cases.models import Case
@@ -23,6 +22,8 @@ def api_detail_reports_view(request, id):
     if request.method == "GET":
         serializer = ReportSerializer(report)
         return Response(serializer.data)
+
+@api_view(['GET',])
 def api_accept_reports_view(request, id):
     try:
         report = Report.objects.get(pk=id)
@@ -32,7 +33,29 @@ def api_accept_reports_view(request, id):
     if request.method == "GET":
         report.status = 2
         report.save()
-        return HttpResponse('<h4>Updated successfully</h4>')
+        lawyerId = report.lawyer
+        person = User.objects.filter(pk=lawyerId)
+        reports = Report.objects.filter(lawyer = person[0].id, status=1)
+        ipc = {}
+        for report in reports:
+            codes = ReportCode.objects.filter(report=report)
+            for code in codes:
+                if report.id in ipc:
+                    ipc[report.id].append(code.ipc_code)
+                else:
+                    ipc[report.id] = [code.ipc_code,]
+            
+        for codes in ipc:
+            ipc[codes] = ", ".join(map(str, ipc[codes]))
+        print(ipc)    
+        context = {
+            "person" : person[0],
+            "reports": reports,
+            "ipc": ipc
+        }
+        return render(request,'users/home.html',context)
+
+        
 
 def api_decline_reports_view(request, id):
     try:
@@ -43,7 +66,28 @@ def api_decline_reports_view(request, id):
     if request.method == "GET":
         report.status = 3
         report.save()
-        return HttpResponse('<h4>Updated successfully</h4>')
+
+        lawyerId = report.lawyer
+        person = User.objects.filter(pk=lawyerId)
+        reports = Report.objects.filter(lawyer = person[0].id, status=1)
+        ipc = {}
+        for report in reports:
+            codes = ReportCode.objects.filter(report=report)
+            for code in codes:
+                if report.id in ipc:
+                    ipc[report.id].append(code.ipc_code)
+                else:
+                    ipc[report.id] = [code.ipc_code,]
+            
+        for codes in ipc:
+            ipc[codes] = ", ".join(map(str, ipc[codes]))
+        print(ipc)    
+        context = {
+            "person" : person[0],
+            "reports": reports,
+            "ipc": ipc
+        }
+        return render(request,'users/home.html',context)
 
 @api_view(['PUT',])
 def api_update_reports_view(request, id):
