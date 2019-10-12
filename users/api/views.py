@@ -13,18 +13,18 @@ def api_detail_users_view(request, id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
-        serializer = UserSerializer(amenity)
+        serializer = UserSerializer(user)
         return Response(serializer.data)
 
 @api_view(['PUT',])
 def api_update_users_view(request, id):
     try:
-        amenity = User.objects.get(pk=id)
+        user = User.objects.get(pk=id)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "PUT":
-        serializer = UserSerializer(amenity, data=request.data)
+        serializer = UserSerializer(user, data=request.data)
         data = {}
         if serializer.is_valid():
             serializer.save()
@@ -36,12 +36,12 @@ def api_update_users_view(request, id):
 @api_view(['DELETE',])
 def api_delete_users_view(request, id):
     try:
-        amenity = User.objects.get(pk=id)
+        user = User.objects.get(pk=id)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "DELETE":
-        operation = amenity.delete()
+        operation = user.delete()
         data = {}
         if operation:
             data["message"] = "User deleted sucessfully."
@@ -53,7 +53,7 @@ def api_delete_users_view(request, id):
 @api_view(['POST',])
 def api_create_users_view(request):
     
-    amenity = User()
+    user = User()
 
     if request.method == "POST":
         serializer = UserSerializer(data=request.data)
