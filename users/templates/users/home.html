@@ -78,14 +78,8 @@
             {%endif%}
           {% endfor %}</p>
         <div class="decisions">
-          <button type="button" class="btn btn-danger">Decline</button>
-          <form action="http://localhost:8000/api/reports/{{report.id}}/update" method="POST"> 
-            {% csrf_token %}
-              <input type="hidden" value = "1" name="status"/>
-              <input type="hidden" name="_method" value="PUT">
-              <input type="hidden" value = "{{report.description}}" name="description"/>
-              <button type="submit" class="btn btn-success">Accept</button>
-          </form>
+          <a href="http://localhost:8000/api/reports/{{report.id}}/decline"><button type="button" class="btn btn-danger">Decline</button></a>
+          <a href="http://localhost:8000/api/reports/{{report.id}}/accept"><button type="button" class="btn btn-success">Accept</button></a>
           
         </div>
       </div>
