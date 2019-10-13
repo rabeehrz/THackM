@@ -160,5 +160,6 @@ def api_create_reports_view(request):
                 rcode = ReportCode.objects.create(report = report[0], ipc_code = i)
                 # rcode.save()
             print(ipc)
+            data.insert(0, serializer.data)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
