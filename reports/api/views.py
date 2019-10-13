@@ -142,8 +142,10 @@ def api_create_reports_view(request):
             tempList = Case.objects.all()
             lawyersList = []
             for lawyer in tempList:
-                id = checkLawyer(lawyersList, lawyer.id)
+                print(lawyer.lawyer.id, lawyer.count, lawyer.id)
+                id = checkLawyer(lawyersList, lawyer.lawyer.id)
                 if id != -1:
+                    print(lawyersList[id])
                     lawyersList[id]['ipc'].append({'key': lawyer.ipc_code, 'value': lawyer.count})
                 else:
                     user = User.objects.filter(id = lawyer.id)
@@ -152,6 +154,11 @@ def api_create_reports_view(request):
             # lawyersList=[{"ipc":[{'key': 319, 'value': 6}, {'key': 300, 'value': 2}, {'key': 304, 'value': 0}, {'key': 312, 'value': 3}], "name": "Person1", "id": 1},{"ipc":[{'key': 319, 'value': 6}, {'key': 300, 'value': 0}, {'key': 304, 'value': 1}, {'key': 312, 'value': 4}], "name": "Person2", "id": 2}]
             print(lawyersList)
             data = findLawyer(serializer.data['description'], lawyersList)
-            print(data)
+            ipc = data.pop(-1)
+            report = Report.objects.filter(id = serializer.data['id'])
+            for i in ipc:
+                rcode = ReportCode.objects.create(report = report[0], ipc_code = i)
+                # rcode.save()
+            print(ipc)
             return Response(data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
