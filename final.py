@@ -17,7 +17,7 @@ def findLawyer(description, lawyersList):
     # description=input()
 
     tokens = nlp(description)
-    testToken =[ {"key": 322, "value": nlp("hurt")},{"key": 300, "value": nlp("murder")},{"key": 304, "value": nlp("Dowry")},{"key": 312, "value": nlp("miscarriage")}]
+    testToken =[ {"key": 319, "value": nlp("hurt")},{"key": 300, "value": nlp("murder")},{"key": 304, "value": nlp("Dowry")},{"key": 312, "value": nlp("miscarriage")}]
 
     keyOutput = []
     print("Test 1")

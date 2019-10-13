@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from users.models import User
 from report_code.models import ReportCode
 
-# from final import findLawyer
+from final import findLawyer
 from cases.models import Case
 from users.models import User
 @api_view(['GET',])
@@ -142,16 +142,16 @@ def api_create_reports_view(request):
             tempList = Case.objects.all()
             lawyersList = []
             for lawyer in tempList:
-                # id = checkLawyer(lawyersList, lawyer.id)
+                id = checkLawyer(lawyersList, lawyer.id)
                 if id != -1:
-                    lawyersList[id]['ipc'].append(lawyer.ipc_code)
+                    lawyersList[id]['ipc'].append({'key': lawyer.ipc_code, 'value': lawyer.count})
                 else:
                     user = User.objects.filter(id = lawyer.id)
                     
                     lawyersList.append({'ipc':[{'key': lawyer.ipc_code, 'value': lawyer.count}], 'name': user[0].name, 'id':lawyer.id})
             # lawyersList=[{"ipc":[{'key': 319, 'value': 6}, {'key': 300, 'value': 2}, {'key': 304, 'value': 0}, {'key': 312, 'value': 3}], "name": "Person1", "id": 1},{"ipc":[{'key': 319, 'value': 6}, {'key': 300, 'value': 0}, {'key': 304, 'value': 1}, {'key': 312, 'value': 4}], "name": "Person2", "id": 2}]
             print(lawyersList)
-            # data = findLawyer(serializer.data['description'], lawyersList)
+            data = findLawyer(serializer.data['description'], lawyersList)
             print(data)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
